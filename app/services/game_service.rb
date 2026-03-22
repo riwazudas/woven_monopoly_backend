@@ -39,6 +39,10 @@ class GameService
     private
 
     def move_player!(game:, player:, roll:)
+      balances_before = game.players.each_with_object({}) do |participant, out|
+        out[participant[:id]] = participant[:money]
+      end
+
       board_size = game.board.length
       previous_position = player[:position]
       new_position = (previous_position + roll) % board_size
@@ -49,7 +53,27 @@ class GameService
 
       player[:position] = new_position
       tile = game.board[new_position]
-      TileHandler.apply(game: game, player: player, tile: tile)
+      action = TileHandler.apply(game: game, player: player, tile: tile)
+
+      balances_after = game.players.each_with_object({}) do |participant, out|
+        out[participant[:id]] = participant[:money]
+      end
+      money_change = balances_after.each_with_object({}) do |(player_id, amount_after), out|
+        out[player_id] = amount_after - balances_before.fetch(player_id)
+      end
+
+      game.last_move = {
+        player_id: player[:id],
+        roll: roll,
+        previous_position: previous_position,
+        new_position: new_position,
+        tile_landed_on: tile,
+        action_required: action.to_s,
+        money_change: {
+          current_player: money_change[player[:id]],
+          by_player: money_change
+        }
+      }
     end
 
     def advance_turn!(game)
