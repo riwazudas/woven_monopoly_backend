@@ -1,6 +1,6 @@
 class GameData
   attr_reader :id, :board, :players, :config, :dice_rolls
-  attr_accessor :current_turn, :status, :current_roll_index, :winner_id
+  attr_accessor :current_turn, :status, :current_roll_index, :winner_id, :last_move
 
   def initialize(player_names:, board:, config:)
     @id = SecureRandom.uuid
@@ -23,6 +23,7 @@ class GameData
     @status = "active"
     @current_roll_index = 0
     @winner_id = nil
+    @last_move = nil
   end
 
   def next_dice_roll
@@ -47,6 +48,7 @@ class GameData
       dice_rolls: dice_rolls,
       current_roll_index: current_roll_index,
       winner_id: winner_id,
+      last_move: last_move,
       config: config
     }
   end
