@@ -7,7 +7,12 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
 	allow do
-		origins "http://localhost:5173"
+		default_origins = [
+			"http://localhost:5173",
+			"https://woven-monopoly-frontend-332081046644.asia-southeast3.run.app"
+		]
+		env_origins = ENV.fetch("CORS_ALLOWED_ORIGINS", "").split(",").map(&:strip).reject(&:empty?)
+		origins(*(default_origins + env_origins).uniq)
 
 		resource "/api/*",
 			headers: :any,
