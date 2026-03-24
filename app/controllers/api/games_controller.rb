@@ -24,20 +24,11 @@ module Api
     end
 
     def config_overrides_param
-      raw = params.fetch(:config, {}).permit(:go_money, :rent_multiplier, dice_rolls: [], dice_sequence: []).to_h
+      raw = params.fetch(:config, {}).permit(:go_money, :rent_multiplier, :roll_file).to_h
       overrides = raw.symbolize_keys
-
-      if overrides.key?(:dice_rolls) && !overrides.key?(:dice_sequence)
-        overrides[:dice_sequence] = overrides.delete(:dice_rolls)
-      else
-        overrides.delete(:dice_rolls)
-      end
 
       overrides[:go_money] = cast_number(overrides[:go_money]) if overrides.key?(:go_money)
       overrides[:rent_multiplier] = cast_number(overrides[:rent_multiplier]) if overrides.key?(:rent_multiplier)
-      if overrides.key?(:dice_sequence)
-        overrides[:dice_sequence] = Array(overrides[:dice_sequence]).map(&:to_i)
-      end
 
       overrides
     end

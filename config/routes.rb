@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   namespace :api do
+    get "roll_files", to: "rolls#index"
+
     resources :games, only: [ :create ] do
       post "moves/roll", to: "moves#roll"
     end
