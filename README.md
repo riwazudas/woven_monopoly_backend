@@ -4,8 +4,6 @@ This repository contains a Rails API for a deterministic Monopoly simulation. Th
 
 ## Server URL
 
-Set your hosted API URL here when ready:
-
 - Backend base URL: `https://woven-monopoly-backend-332081046644.asia-southeast3.run.app`
 
 - API base path: `https://woven-monopoly-backend-332081046644.asia-southeast3.run.app/api`
